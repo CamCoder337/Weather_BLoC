@@ -2,8 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_bloc/bloc/weather_bloc.dart';
 import 'package:weather_bloc/constants/constants.dart';
 import 'package:weather_bloc/constants/assets.dart';
+import 'package:intl/intl.dart';
+
+import '../components/circle_error.dart';
 
 
 class HomeScreen extends StatelessWidget {
@@ -68,14 +73,18 @@ class HomeScreen extends StatelessWidget {
                     decoration: const BoxDecoration(color: Colors.transparent),
                   ),
               ),
-              SizedBox(
+              BlocBuilder<WeatherBloc, WeatherState>(
+              builder: (context, state) {
+                if(state is WeatherSuccess){
+                return
+                  SizedBox(
                 width: screenWidth,
                 height: screenHeight,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                        '📍 73 Av. de Yansoki',
+                    Text(
+                      "📍 ${state.weather.areaName}",
                         style: TextStyle(
                           color: Constants.white,
                           fontWeight: FontWeight.w300,
@@ -83,7 +92,7 @@ class HomeScreen extends StatelessWidget {
                         ),),
                     SizedBox(height: 8,),
                     Text(
-                      'Good Morning',
+                      'Hi Sensei',
                       style: TextStyle(
                         color: Constants.white,
                         fontWeight: FontWeight.bold,
@@ -92,7 +101,7 @@ class HomeScreen extends StatelessWidget {
                     Image.asset(Assets.thunderStormImage),
                     Center(
                       child: Text(
-                        '21°C',
+                        '${state.weather.temperature!.celsius!.round()}°C',
                         style: TextStyle(
                           color: Constants.white,
                           fontWeight: FontWeight.w600,
@@ -102,7 +111,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     Center(
                       child: Text(
-                        'THUNDERSTORM',
+                        state.weather.weatherMain!.toUpperCase(),
                         style: TextStyle(
                           color: Constants.white,
                           fontWeight: FontWeight.w500,
@@ -113,7 +122,7 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(height: 5,),
                     Center(
                       child: Text(
-                        'Friday 16 🌐 9:46am',
+                        DateFormat('EEEE dd •').add_jm().format(state.weather.date!),
                         style: TextStyle(
                           color: Constants.white,
                           fontWeight: FontWeight.w400,
@@ -141,7 +150,7 @@ class HomeScreen extends StatelessWidget {
                                   ),),
                                 SizedBox(height: 3),
                                 Text(
-                                  '12:07am',
+                                  DateFormat().add_jm().format(state.weather.sunrise!),
                                   style: TextStyle(
                                     color: Constants.white,
                                     fontWeight: FontWeight.w700,
@@ -162,15 +171,13 @@ class HomeScreen extends StatelessWidget {
                                   style: TextStyle(
                                     color: Constants.white,
                                     fontWeight: FontWeight.w400,
-                                    // fontSize: 20,
                                   ),),
                                 SizedBox(height: 3),
                                 Text(
-                                  ' 9:00pm',
+                                  DateFormat().add_jm().format(state.weather.sunset!),
                                   style: TextStyle(
                                     color: Constants.white,
                                     fontWeight: FontWeight.w700,
-                                    // fontSize: 25,
                                   ),),
                               ],)
                           ],
@@ -199,15 +206,13 @@ class HomeScreen extends StatelessWidget {
                                   style: TextStyle(
                                     color: Constants.white,
                                     fontWeight: FontWeight.w400,
-                                    // fontSize: 20,
                                   ),),
                                 SizedBox(height: 3),
                                 Text(
-                                  '12°C',
+                                  "${state.weather.tempMax!.celsius!.round()} °C",
                                   style: TextStyle(
                                     color: Constants.white,
                                     fontWeight: FontWeight.w700,
-                                    // fontSize: 25,
                                   ),),
                               ],)
                           ],
@@ -228,7 +233,7 @@ class HomeScreen extends StatelessWidget {
                                   ),),
                                 SizedBox(height: 3),
                                 Text(
-                                  '8°C',
+                                  "${state.weather.tempMin!.celsius!.round()} °C",
                                   style: TextStyle(
                                     color: Constants.white,
                                     fontWeight: FontWeight.w700,
@@ -242,7 +247,14 @@ class HomeScreen extends StatelessWidget {
                   ],
 
                 ),
-              )
+              );
+                } else{
+                  return
+                    CircleError();
+                    // Container(child: Text('Error'),);
+                }
+  },
+)
             ],
           ),
         ),
