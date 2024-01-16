@@ -91,14 +91,14 @@ class HomeScreen extends StatelessWidget {
                           fontSize: 20,
                         ),),
                     SizedBox(height: 8,),
-                    Text(
+                    const Text(
                       'Hi Sensei',
                       style: TextStyle(
                         color: Constants.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 25,
                       ),),
-                    Image.asset(Assets.thunderStormImage),
+                    getWeatherIcon(state.weather.weatherConditionCode!),
                     Center(
                       child: Text(
                         '${state.weather.temperature!.celsius!.round()}°C',
