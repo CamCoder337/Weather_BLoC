@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+
 class Assets {
   Assets._();
   static const String folder = 'assets/';
@@ -16,4 +18,25 @@ class Assets {
   static const moonImage = '${folder}12.png';
   static const maxTempIamge = '${folder}13.png';
   static const minTempIamge = '${folder}14.png';
+}
+
+Widget getWeatherIcon(int code){
+  switch (code) {
+    case >= 200 && < 300 :
+      return Image.asset(Assets.thunderStormImage);
+    case >= 300 && < 400 :
+      return Image.asset(Assets.smallRainyImage);
+    case >= 500 && < 600 :
+      return Image.asset(Assets.heavyRainyImage);
+    case >= 600 && < 700 :
+      return Image.asset(Assets.cloudySnowImage);
+    case >= 700 && < 800 :
+      return Image.asset(Assets.cloudyMistImage);
+    case == 800 :
+      return Image.asset(Assets.sunshineImage);
+    case > 800 && <= 804 :
+      return Image.asset(Assets.cloudySunshineImage);
+    default:
+      return Image.asset(Assets.cloudySunshineImage);
+  }
 }
